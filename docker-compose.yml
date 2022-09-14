@@ -1,0 +1,23 @@
+version: '3'
+services:
+    dynamicWeb:                # 容器名称, 自行修改
+        build: .           # 构建路径, . 表示会在当前路径下找 Dockerfile 文件
+        image: dynamicweb  # 镜像名称, 如果没有上面的 build, docker-compose 将会尝试从官方仓库 pull 该镜像
+        container_name: dynamicWeb
+        ports:
+        - 22067:80     # 映射端口 虚拟机端口:容器内端口
+        links:
+          - dynamicWeb_mysql     #连接mysql服务
+        restart: unless-stopped
+#        volumes:
+#        - ./src:/var/www/html
+
+    dynamicWeb_mysql:
+        build: ./mysql
+        image: dynamicwebsql
+        container_name: dynamicWebSql
+        environment:
+          MYSQL_ROOT_PASSWORD: "root"
+#        ports:
+#         - 22068:3306
+        restart: unless-stopped
